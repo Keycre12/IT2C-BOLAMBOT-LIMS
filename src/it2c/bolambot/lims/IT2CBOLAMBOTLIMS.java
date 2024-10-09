@@ -20,7 +20,31 @@ public class IT2CBOLAMBOTLIMS {
 
         conf.addRecord(sql, book_title, book_genre, book_author);
     }
+     public void viewBooks(){
+        Scanner sc = new Scanner(System.in);
+        config conf = new config();
+        
+        System.out.print("Enter ID to view: ");
+        String book_id = sc.next();
+        
+        String sql = "SELECT * FROM BookInventory WHERE book_id = ?";
+        String[] columnHeaders = {"Title", "Genre", "Author"};
+        String[] columnNames = {"book_title", "book_genre", "book_author"};
+        
+        conf.viewRecords(sql, columnHeaders, columnNames, book_id);
+    }
+      public void DeleteBooks(){
+        Scanner sc = new Scanner(System.in);
+        config conf = new config();
+        
+       System.out.print("Enter ID BAYOT KC to delete: ");
+    String book_id = sc.next();
     
+     String deleteSql = "DELETE FROM BookInventory WHERE book_id = ?";
+    conf.deleteRecord(deleteSql, book_id);
+    
+  
+}
     public static void main(String[] args) {
         
         Scanner sc = new Scanner (System.in);
@@ -41,6 +65,19 @@ public class IT2CBOLAMBOTLIMS {
                     IT2CBOLAMBOTLIMS demo = new  IT2CBOLAMBOTLIMS();
                     demo.addBooks();
                     
+                    break;
+                    
+                case 2:
+                    IT2CBOLAMBOTLIMS demo2 = new  IT2CBOLAMBOTLIMS();
+                    demo2.viewBooks();
+                    break;
+                    
+                    case 3:
+                    
+                    break;
+                    case 4:
+                    IT2CBOLAMBOTLIMS demo4 = new  IT2CBOLAMBOTLIMS();
+                    demo4.DeleteBooks();
                     break;
             }
             

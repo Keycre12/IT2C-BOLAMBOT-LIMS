@@ -5,11 +5,12 @@ import java.util.Scanner;
 
 
 public class IT2CBOLAMBOTLIMS {
-      public void addBooks(){
+      public void addBook(){
         Scanner sc = new Scanner(System.in);
-        config conf = new config();
+        
         System.out.print("Book Title: ");
         String book_title = sc.next();
+        
         System.out.print("Book Genre: ");
         String book_genre = sc.next();
          System.out.print("Book Author: ");
@@ -17,37 +18,55 @@ public class IT2CBOLAMBOTLIMS {
        
 
         String sql = "INSERT INTO BookInventory ( book_title, book_genre, book_author) VALUES (?, ?, ?)";
-
-        conf.addRecord(sql, book_title, book_genre, book_author);
+        config conf = new config();
+        conf.addBook(sql, book_title, book_genre, book_author);
     }
      public void viewBooks(){
-        Scanner sc = new Scanner(System.in);
-        config conf = new config();
-        
-        System.out.print("Enter ID to view: ");
-        String book_id = sc.next();
-        
-        String sql = "SELECT * FROM BookInventory WHERE book_id = ?";
-        String[] columnHeaders = {"Title", "Genre", "Author"};
-        String[] columnNames = {"book_title", "book_genre", "book_author"};
-        
-        conf.viewRecords(sql, columnHeaders, columnNames, book_id);
+   
+    String cqry = "SELECT book_id, book_title, book_genre, book_author FROM BookInventory";
+    String[] hrds = {"ID", "Title", "Genre", "Author"};
+    String[] clmns = {"book_id", "book_title", "book_genre", "book_author"};
+
+    config conf = new config();
+    conf.viewBooks(cqry, hrds, clmns);
     }
-      public void DeleteBooks(){
+
+     
+     private void updateBook(){
+         Scanner sc = new Scanner(System.in);
+         System.out.println("Enter Book ID: ");
+         int id = sc.nextInt();
+         
+         System.out.print("Enter new Book Title: ");
+         String book_title = sc.next();
+         
+         System.out.print("Enter new Book Genre: ");
+         String book_genre = sc.next();
+         
+          System.out.print("Enter new Book Author: ");
+         String book_author = sc.next();
+         
+         String qry = "UPDATE BookInventory SET book_title = ?, book_genre = ?, book_author = ? WHERE book_id = ? ";
+         
+         config conf = new config();
+         conf.updateBooks(qry, book_title, book_genre, book_author, id);
+             
+     }
+      public void DeleteBook(){
         Scanner sc = new Scanner(System.in);
-        config conf = new config();
+        System.out.print("Enter Book ID to delete: ");
+        int id = sc.nextInt();
         
-       System.out.print("Enter ID BAYOT KC to delete: ");
-    String book_id = sc.next();
-    
-     String deleteSql = "DELETE FROM BookInventory WHERE book_id = ?";
-    conf.deleteRecord(deleteSql, book_id);
-    
-  
+        
+         String sqlDelete = "DELETE FROM BookInventory WHERE book_id = ?";
+         config conf = new config();
+         conf.deleteBook(sqlDelete, id);
+       
 }
     public static void main(String[] args) {
         
-        Scanner sc = new Scanner (System.in);
+        Scanner sc = new Scanner(System.in);
+        IT2CBOLAMBOTLIMS book = new IT2CBOLAMBOTLIMS(); 
         String response;
         
         do{
@@ -62,29 +81,36 @@ public class IT2CBOLAMBOTLIMS {
             
             switch (action){
                 case 1:
-                    IT2CBOLAMBOTLIMS demo = new  IT2CBOLAMBOTLIMS();
-                    demo.addBooks();
+                    book.addBook();
                     
                     break;
                     
                 case 2:
-                    IT2CBOLAMBOTLIMS demo2 = new  IT2CBOLAMBOTLIMS();
-                    demo2.viewBooks();
+                   book.viewBooks();
                     break;
                     
                     case 3:
+                   book.viewBooks();
+                   book.updateBook();
+                    break;
                     
-                    break;
                     case 4:
-                    IT2CBOLAMBOTLIMS demo4 = new  IT2CBOLAMBOTLIMS();
-                    demo4.DeleteBooks();
+                    book.viewBooks();
+                    book.DeleteBook();
+                    book.viewBooks();
                     break;
+                    
+                    case 5: 
+                        System.out.println("Exiting...");
+                        break;
+                    default:
+                        System.out.println("Invalid action. Please try again.");
             }
             
-            System.out.println("Continue (yes/no): ");
+            System.out.print("Continue (yes/no): ");
             response = sc.next();
             
-        } while(response.equals("yes"));
+        } while(response.equalsIgnoreCase("yes"));
         System.out.println("Thank You See You Soon!");
         
     }

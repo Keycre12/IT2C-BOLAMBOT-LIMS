@@ -19,6 +19,11 @@ public class IT2CBOLAMBOTLIMS {
 
             
             System.out.print("Enter Action: ");
+              while (!sc.hasNextInt()) {
+                System.out.print("Invalid input. Please enter a number (1-3): ");
+                sc.next();
+            }
+            
             int action = sc.nextInt();
             IT2CBOLAMBOTLIMS book = new IT2CBOLAMBOTLIMS(); 
             
@@ -34,6 +39,8 @@ public class IT2CBOLAMBOTLIMS {
                 case 2: 
                     Inventory ss = new Inventory();
                     ss.cDetails();
+                    
+                    break;
                     
                 case 3:
                     System.out.println("Exit Selected...type 'yes' to continue:" );

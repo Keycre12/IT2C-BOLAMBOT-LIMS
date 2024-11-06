@@ -80,6 +80,7 @@ public class BookInfo {
 
     for (int i = 0; i < numberOfBooks; i++) {
         System.out.println("Enter details for Book " + (i + 1));
+         sc.nextLine();
 
         String b_isbn;
         do {
@@ -135,11 +136,13 @@ public class BookInfo {
                     break;
                 } else {
                     System.out.println("Please enter a valid year.");
-                }
-                sc.next();
             }
+        } else {
+            System.out.println("Invalid input. Please enter a numeric year.");
+            sc.next(); 
         }
-        sc.nextLine();  
+    }
+         
 
         String sql = "INSERT INTO BookInfo (b_isbn, b_title, b_author, b_category, b_publisher, b_publicationyr) VALUES (?, ?, ?, ?, ?, ?)";
         config conf = new config();
@@ -172,6 +175,7 @@ public class BookInfo {
               System.out.print("Select Book ID Again: ");
               id=sc.nextInt();
         }
+        sc.nextLine();
         String b_isbn;
         do {
             System.out.print("Book ISBN (10 digits): ");
@@ -228,7 +232,7 @@ public class BookInfo {
                 } else {
                     System.out.println("Please enter a valid year.");
                 }
-                sc.next();
+                
             }
         }
         sc.nextLine();  

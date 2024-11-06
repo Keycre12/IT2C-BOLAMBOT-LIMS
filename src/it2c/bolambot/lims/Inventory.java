@@ -4,12 +4,13 @@ import java.sql.*;
 import java.util.Scanner;
 
 public class Inventory {
+
     
-    public void cDetails() {
+        public void cDetails() {
         Scanner sc = new Scanner(System.in);
         String response;
         
-        do {
+      do {
             System.out.println("\n---------------------------");
             System.out.println("INVENTORY PANEL             |");
             System.out.println("1. ADD INVENTORY            |");
@@ -23,45 +24,48 @@ public class Inventory {
             int action = sc.nextInt();
             Inventory ss = new Inventory();
             
-            while (action < 1 || action > 5) {
-                System.out.print("Invalid selection, Try Again: ");
-                action = sc.nextInt();
-             }
             
-            switch (action) {
-                case 1:
-                    ss.addInventory();
-                    ss.viewInventory();
-                    
-                    break;
-                case 2:
-                    ss.viewInventory();
-                    break;
-                case 3:
-                    ss.viewInventory();
-                    ss.updateInventory();
-                    ss.viewInventory();
-                    break;
-                case 4:
-                    ss.viewInventory();
-                    ss.deleteInventory();
-                    ss.viewInventory();
-                    break;
-                 case 5:
+              while (action < 1 || action > 5) {
+              System.out.print("Invalid selection, Try Again: ");
+              action = sc.nextInt();
+             }
+      switch (action){
+          
+          case 1:
+               ss.addInventory();
+               ss.viewInventory();
+
+              break;
+          
+          case 2:
+               ss.viewInventory();
+  
+              break;
+          
+            case 3:
+                ss.viewInventory();
+                ss.updateInventory();
+                ss.viewInventory();
+                break;
+         
+
+            case 4:
+                ss.viewInventory();
+                ss.deleteInventory();
+                ss.viewInventory();
+              break;
+
+            case 5:
               
               break;
               
 
       }
-              
-            System.out.print("Do you want to continue? (yes/no): ");
-            response = sc.next();
-            
-        } while (response.equalsIgnoreCase("yes"));
-        
-        sc.close();
-    }
-    
+      System.out.print("Do you want to continue?(yes/no): ");
+      response = sc.next();
+      
+  }   while(response.equalsIgnoreCase("yes"));
+}
     private void addInventory() {
         Scanner sc = new Scanner(System.in);
         config conf = new config();
@@ -210,55 +214,4 @@ public class Inventory {
        
       }
 }
-
-//    
-//   private void updateInventory() {
-//    Scanner sc = new Scanner(System.in);
-//    config conf = new config();
-//    System.out.println("Enter Book ID: ");
-//    int id = sc.nextInt();
-//        
-//    while (conf.getSingleValue("SELECT b_id FROM BookInfo WHERE b_id=?", id) == 0) {
-//        System.out.println("Selected ID doesn't exist");
-//        System.out.print("Select Book ID Again: ");
-//        id = sc.nextInt();
-//    }
-//    
-//    System.out.print("Enter new Total Copies: ");
-//    int i_tcopies = sc.nextInt();
-//    
-//    System.out.print("Enter Borrowed Copies: ");
-//    int i_bcopies = sc.nextInt();
-//    
-//    System.out.print("Enter Damaged Copies: ");
-//    int i_dcopies = sc.nextInt();
-//            
-//    }
-//
-//    int i_stocks = i_tcopies - (i_bcopies + i_dcopies);
-//
-//   String qry = "UPDATE Inventory SET i_tcopies = ?, i_bcopies = ?, i_dcopies = ?, i_stocks = ?WHERE i_id = ?";
-//    conf.updateRecord(qry, id, i_tcopies, i_bcopies, i_dcopies, i_stocks, id);
-//    
-//    System.out.println("Inventory added successfully.");
-//    System.out.println("Total stocks left: " + i_stocks);
-//}
-//
-//      public void DeleteBook(){
-//        Scanner sc = new Scanner(System.in);
-//        System.out.print("Enter Book ID to delete: ");
-//        int id = sc.nextInt();
-//        config conf = new config();
-//        
-//        while(conf.getSingleValue("SELECT b_id FROM BookInfo WHERE b_id=?  ",id)==0){
-//              System.out.println("Selected ID doesn't exist");
-//              System.out.print("Select Book ID Again: ");
-//              id=sc.nextInt();
-//        }
-//         
-//        
-//         String sqlDelete = "DELETE FROM BookInfo WHERE b_id = ?";
-//         conf.deleteRecord(sqlDelete, id);
-//       
-//      }
 

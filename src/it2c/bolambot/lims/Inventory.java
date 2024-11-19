@@ -1,6 +1,8 @@
 package it2c.bolambot.lims;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class Inventory {
@@ -33,7 +35,7 @@ public class Inventory {
           
           case 1:
                ss.addInventory();
-               ss.viewInventory();
+                ss.viewInventory();
 
               break;
           
@@ -83,76 +85,46 @@ public class Inventory {
             id = sc.nextInt();
         }
         
-     int i_tcopies;
+        String t_type;
         while (true) {
-            System.out.print("Enter Total Copies: ");
+            System.out.print("Enter Transaction type (restock, damage, borrowed): ");
+            t_type = sc.next();
+            if (t_type.equalsIgnoreCase("restock") || t_type.equalsIgnoreCase("damage") || t_type.equalsIgnoreCase("borrowed")) {
+                break;
+            } else {
+                System.out.println("Invalid transaction type. Please try again.");
+            }
+        }
+        
+         int quantity = -1; 
+        while (true) {
+            System.out.print("Enter quantity: ");
             if (sc.hasNextInt()) {
-                i_tcopies = sc.nextInt();
-                if (i_tcopies > 0) {
-                    break; 
+                quantity = sc.nextInt();
+                if (quantity > 0) {
+                    break;
                 } else {
-                    System.out.println("Total copies must be a positive integer.");
+                    System.out.println("Please enter a valid number.");
                 }
             } else {
-                System.out.println("Please enter a valid number for total copies.");
+                System.out.println("Invalid input. Please enter a valid number.");
                 sc.next(); 
             }
-    }
-
-    
-    int i_bcopies;
-    while (true) {
-        System.out.print("Enter Borrowed Copies: ");
-        if (sc.hasNextInt()) {
-            i_bcopies = sc.nextInt();
-            if (i_bcopies >= 0 && i_bcopies <= i_tcopies) {
-                break; 
-            } else {
-                System.out.println("Borrowed copies cannot exceed total copies.");
-            }
-        } else {
-            System.out.println("Please enter valid number for borrowed copies.");
-            sc.next(); 
         }
-    }
+        
+        LocalDate currdate = LocalDate.now();
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        String date = currdate.format(format);
 
-   
-    int i_dcopies;
-    while (true) {
-        System.out.print("Enter Damaged Copies: ");
-        if (sc.hasNextInt()) {
-            i_dcopies = sc.nextInt();
-            if (i_dcopies >= 0 && i_dcopies <= i_tcopies) {
-                break; 
-            } else {
-                System.out.println("Damaged copies cannot exceed total copies.");
-            }
-        } else {
-            System.out.println("Please enter valid number.");
-            sc.next(); 
-        }
-    }
-
+        String qry  = "INSERT INTO Inventory (b_id,  t_type, quantity, date) VALUES (?, ?, ?, ? )";
+        conf.addRecord(qry, id, t_type, quantity,  date);
     
-    int i_stocks = i_tcopies - (i_bcopies + i_dcopies);
-    if (i_stocks < 0) {
-        System.out.println("Borrowed and damaged copies exceed total copies. Please review your input.");
-        return; 
-    }
-
-    
-    String qry = "INSERT INTO Inventory (b_id, i_tcopies, i_bcopies, i_dcopies, i_stocks) VALUES (?, ?, ?, ?, ?)";
-    conf.addRecord(qry, id, i_tcopies, i_bcopies, i_dcopies, i_stocks);
-    
-    System.out.println("Inventory added successfully.");
-    System.out.println("Total stocks left: " + i_stocks);
-}
-    
+}  
     public void viewInventory() {
-        String qry = "SELECT i_id, b_isbn, b_title, i_tcopies, i_bcopies, i_dcopies, i_stocks FROM Inventory " +
+        String qry = "SELECT i_id, b_title, t_type, quantity, date FROM Inventory " +
                      "LEFT JOIN BookInfo ON BookInfo.b_id = Inventory.b_id";
-        String[] hrds = {"IID", "ISBN", "Title", "Total Copies", "Borrowed Copies", "Damaged Copies", "Stocks Left"};
-        String[] clmns = {"i_id", "b_isbn", "b_title", "i_tcopies", "i_bcopies", "i_dcopies", "i_stocks"};
+        String[] hrds = {"IID",  "Title", "Transaction Type", "Quantity",  "DATE"};
+        String[] clmns = {"i_id", "b_title",  "t_type","quantity", "date"};
         
         config conf = new config();
         conf.viewRecords(qry, hrds, clmns);
@@ -163,7 +135,7 @@ public class Inventory {
          
         Scanner sc = new Scanner(System.in);
         config conf = new config();
-        System.out.println("Enter Book ID: ");
+        System.out.println("Enter IID TO UPDATE: ");
         int i_id = sc.nextInt();
         
         String sql = "SELECT i_id FROM Inventory WHERE i_id = ?";
@@ -173,24 +145,29 @@ public class Inventory {
               System.out.print("Select Book ID Again: ");
               i_id =sc.nextInt();
         }
-         
-        System.out.print("Enter new Total Copies: ");
-        int i_tcopies = sc.nextInt();
-         
-        System.out.print("Enter Borrowed Copies: ");
-        int i_bcopies = sc.nextInt();
-    
-        System.out.print("Enter Damaged Copies: ");
-        int i_dcopies = sc.nextInt();
+  
+        int quantity = -1; 
+        while (true) {
+            System.out.print("Enter quantity: ");
+            if (sc.hasNextInt()) {
+                quantity = sc.nextInt();
+                if (quantity > 0) {
+                    break;
+                } else {
+                    System.out.println("Please enter a valid number.");
+                }
+            } else {
+                System.out.println("Invalid input. Please enter a valid number.");
+                sc.next(); 
+            }
+        }
+
+        LocalDate currdate = LocalDate.now();
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        String date = currdate.format(format);
         
-        int i_stocks = i_tcopies - (i_bcopies + i_dcopies);
-        
-        String qry = "UPDATE Inventory SET i_tcopies = ?, i_bcopies = ?, i_dcopies = ?, i_stocks = ?WHERE i_id = ?";
-        conf.updateRecord(qry, i_tcopies, i_bcopies, i_dcopies, i_stocks, i_id);
-         
-        System.out.println("Inventory added successfully.");
-        System.out.println("Total stocks left: " + i_stocks);
-             
+         String qry = "UPDATE Inventory SET quantity = ?, date = ? WHERE i_id = ?";
+         conf.updateRecord(qry, quantity, date, i_id);        
      }
       public void deleteInventory(){
         Scanner sc = new Scanner(System.in);

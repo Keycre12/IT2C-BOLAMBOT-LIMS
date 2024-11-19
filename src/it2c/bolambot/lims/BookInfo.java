@@ -80,17 +80,18 @@ public class BookInfo {
 
     for (int i = 0; i < numberOfBooks; i++) {
         System.out.println("Enter details for Book " + (i + 1));
-         sc.nextLine();
+         
 
         String b_isbn;
         do {
             System.out.print("Book ISBN (10 digits): ");
-            b_isbn = sc.nextLine();
+            b_isbn = sc.next();
             if (b_isbn.isEmpty() || !b_isbn.matches("[0-9Xx]{10}")) {
                 System.out.println("Invalid ISBN, Please enter(10 digits): ");
         }
             } while (b_isbn.isEmpty() || !b_isbn.matches("[0-9Xx]{10}"));
         
+        sc.nextLine();
         String b_title;
         do {
             System.out.print("Book Title: ");
